@@ -1,6 +1,7 @@
 package org.example.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,13 +19,16 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "author_id")
+    @NotNull
     private User author;
 
     @ManyToOne
     @JoinColumn(name = "receiver_id")
+    @NotNull
     private User receiver;
 
     @Column(length = 999)
+    @NotNull
     private String text;
 
     private LocalDateTime time;

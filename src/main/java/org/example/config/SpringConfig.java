@@ -1,5 +1,6 @@
 package org.example.config;
 
+import jakarta.persistence.Persistence;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -57,5 +58,12 @@ public class SpringConfig implements WebMvcConfigurer {
         dataSource.setUser("postgres");
         dataSource.setPassword("root");
         return dataSource;
+    }
+
+    public static void main(String[] args) {
+        var entityManagerFactory = Persistence.createEntityManagerFactory("default");
+        var entityManager = entityManagerFactory.createEntityManager();
+        entityManager.close();
+        entityManagerFactory.close();
     }
 }

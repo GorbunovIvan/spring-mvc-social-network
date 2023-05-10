@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Table(name = "posts")
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
-@EqualsAndHashCode(of = "id")
-public class Post {
+@EqualsAndHashCode(of = "id", callSuper = false)
+public class Post extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logging in</title>
+</head>
+<body>
+    <form th:method="POST" th:action="@{/users/login}" th:object="${params}">
+
+        <label for="login">Login</label>
+        <input id="login" type="text" th:field="*{login}"/>
+        <br/>
+
+        <label for="password">Password</label>
+        <input id="password" type="password" th:field="*{password}"/>
+        <br/>
+
+        <input type="submit" value="Login"/>
+
+    </form>
+</body>
+</html>

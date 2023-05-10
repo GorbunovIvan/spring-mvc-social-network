@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 @Table(name = "messages")
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
-@EqualsAndHashCode(of = "id")
-public class Message {
+@EqualsAndHashCode(of = "id", callSuper = false)
+public class Message extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

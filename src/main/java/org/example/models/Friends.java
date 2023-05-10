@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 @IdClass(FriendsId.class)
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
-@EqualsAndHashCode(of = { "inviter", "receiver" })
-public class Friends {
+@EqualsAndHashCode(of = { "inviter", "receiver" }, callSuper = false)
+public class Friends extends BaseEntity {
 
     @Id
     @ManyToOne

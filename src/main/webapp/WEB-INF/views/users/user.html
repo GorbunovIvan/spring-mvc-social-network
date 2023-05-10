@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${'User ' + user.getFullName()}">User</title>
+</head>
+<body>
+    <p>Name: <span th:text="${user.getName()}">name</span></p>
+    <p>Surname: <span th:text="${user.getSurname()}">surname</span></p>
+    <p>BirthDay: <span th:text="${user.getBirthDay()}">birthDay</span></p>
+</body>
+</html>

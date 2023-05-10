@@ -2,7 +2,9 @@ package org.example.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import org.example.models.BaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -11,13 +13,13 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
-public class BaseDAO<T> implements DAO<T> {
+public class BaseDAO<T extends BaseEntity> implements DAO<T> {
 
     private EntityManagerFactory entityManagerFactory;
 
     private final Class<T> tClass;
 
-    public BaseDAO(Class<T> tClass) {
+    public BaseDAO(@Value("#{T(org.example.models.BaseEntity)}") Class<T> tClass) {
         this.tClass = tClass;
     }
 
@@ -53,8 +55,8 @@ public class BaseDAO<T> implements DAO<T> {
     @Override
     public void update(int id, T entity) {
         doInSession(entityManager -> {
-//            if (entity.getId() == null)
-//                entity.setId(id);
+            if (entity.getId() == null)
+                entity.setId(id);
             entityManager.merge(entity);
         });
     }
@@ -69,13 +71,17 @@ public class BaseDAO<T> implements DAO<T> {
 
     protected void doInSession(Consumer<EntityManager> consumer) {
         var entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
         consumer.accept(entityManager);
+        entityManager.getTransaction().commit();
         entityManager.close();
     }
 
     protected <R> R doInSessionAndReturn(Function<EntityManager, R> function) {
         var entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
         R entity = function.apply(entityManager);
+        entityManager.getTransaction().commit();
         entityManager.close();
         return entity;
     }

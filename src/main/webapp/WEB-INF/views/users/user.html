@@ -5,8 +5,27 @@
     <title th:text="${'User ' + user.getFullName()}">User</title>
 </head>
 <body>
-    <p>Name: <span th:text="${user.getName()}">name</span></p>
-    <p>Surname: <span th:text="${user.getSurname()}">surname</span></p>
-    <p>BirthDay: <span th:text="${user.getBirthDay()}">birthDay</span></p>
+    <div>
+        <p>Name: <span th:text="${user.getName()}">name</span></p>
+        <p>Surname: <span th:text="${user.getSurname()}">surname</span></p>
+        <p>Birthday: <span th:text="${user.getBirthDay()}">birth day</span></p>
+        <p><a th:href="@{/users/{id}/edit(id=${user.getId()})}">edit</a></p>
+    </div>
+    <hr/>
+    <div>
+        <p>Posts</p>
+        <div th:each="post : ${user.getPosts()}">
+            <p>
+                <span th:text="${post.getTime()}">time</span><br/>
+                <span th:text="${post.getContent()}">content</span>
+            </p>
+        </div>
+        <form th:method="POST" th:action="@{/posts}" th:object="${newPost}">
+            <label for="content"></label>
+            <textarea id="content" th:field="*{content}">content</textarea>
+            <br/>
+            <input type="submit" value="add new post"/>
+        </form>
+    </div>
 </body>
 </html>

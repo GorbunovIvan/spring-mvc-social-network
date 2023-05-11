@@ -11,6 +11,11 @@ public class FriendsDAO extends BaseDAO<Friends> {
         super(Friends.class);
     }
 
+    @Override
+    public void create(Friends friends) {
+        doInSession(entityManager -> entityManager.merge(friends));
+    }
+
     public void delete(User friend1, User friend2) {
 
         Friends friendsRelation = doInSessionAndReturn(entityManager -> {
@@ -29,7 +34,7 @@ public class FriendsDAO extends BaseDAO<Friends> {
 
         doInSession(entityManager -> {
             entityManager.createQuery("DELETE FROM Friends " +
-                            "WHERE (inviter=:inviter AND receiver=:receiver)", Friends.class)
+                            "WHERE inviter=:inviter AND receiver=:receiver")
                     .setParameter("inviter", friendsRelation.getInviter())
                     .setParameter("receiver", friendsRelation.getReceiver())
                     .executeUpdate();

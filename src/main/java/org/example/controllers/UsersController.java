@@ -40,11 +40,14 @@ public class UsersController {
     @GetMapping("/{id}")
     public String user(@PathVariable Integer id, Model model, HttpServletRequest request) {
 
+        User user = userDAO.readUserWithPostsAndFriends(id);
         User currentUser = usersUtil.getCurrentUser(request);
 
-        model.addAttribute("user", userDAO.readUserWithPosts(id));
+        model.addAttribute("user", user);
         model.addAttribute("newPost", new Post());
         model.addAttribute("isAuthorized", currentUser != null);
+        model.addAttribute("isCurrentUser", currentUser != null && currentUser.equals(user));
+        model.addAttribute("isFriendToCurrentUser", user.getFriends().contains(currentUser));
         model.addAttribute("currentUser", currentUser);
 
         return "/users/user";
@@ -83,7 +86,7 @@ public class UsersController {
 
         if (currentUser == null
             || !currentUser.getId().equals(id))
-            throw new IllegalStateException("You are not authorized");
+            throw new IllegalStateException("You are not allowed to go here");
 
         model.addAttribute("user", userDAO.read(id));
 
@@ -92,7 +95,14 @@ public class UsersController {
 
     @PatchMapping("/{id}")
     public String editForm(@PathVariable int id,
-                           @ModelAttribute @Valid User user, BindingResult bindingResult) {
+                           @ModelAttribute @Valid User user, BindingResult bindingResult,
+                           HttpServletRequest request) {
+
+        User currentUser = usersUtil.getCurrentUser(request);
+
+        if (currentUser == null
+                || !currentUser.getId().equals(id))
+            throw new IllegalStateException("You are not allowed to do this");
 
         if (bindingResult.hasErrors())
             return "redirect:/users/" + id + "/edit";

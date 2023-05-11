@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import org.example.dao.UserDAO;
 import org.example.models.Post;
 import org.example.models.User;
-import org.example.utils.users.PostsUtil;
 import org.example.utils.users.UsersUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,12 +19,10 @@ public class UsersController {
 
     private final UserDAO userDAO;
     private final UsersUtil usersUtil;
-    private final PostsUtil postsUtil;
 
-    public UsersController(UserDAO userDAO, UsersUtil usersUtil, PostsUtil postsUtil) {
+    public UsersController(UserDAO userDAO, UsersUtil usersUtil) {
         this.userDAO = userDAO;
         this.usersUtil = usersUtil;
-        this.postsUtil = postsUtil;
     }
 
     @GetMapping

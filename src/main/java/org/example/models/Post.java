@@ -20,10 +20,10 @@ public class Post extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "author_id")
-    @NotNull
+    @NotNull(message = "Author should not be empty")
     private User author;
 
-    @NotNull
+    @NotNull(message = "Content should not be empty")
     @Size(min = 1, max = 999, message = "Content should be between 1 and 999 characters")
     private String content;
 

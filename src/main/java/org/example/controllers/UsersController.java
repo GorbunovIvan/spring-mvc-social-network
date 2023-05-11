@@ -26,15 +26,27 @@ public class UsersController {
     }
 
     @GetMapping
-    public String users(Model model) {
+    public String users(Model model, HttpServletRequest request) {
+
+        User currentUser = usersUtil.getCurrentUser(request);
+
         model.addAttribute("users", userDAO.readAll());
+        model.addAttribute("isAuthorized", currentUser != null);
+        model.addAttribute("currentUser", currentUser);
+
         return "/users/users";
     }
 
     @GetMapping("/{id}")
     public String user(@PathVariable Integer id, Model model, HttpServletRequest request) {
-        model.addAttribute("user", userDAO.readFull(id));
+
+        User currentUser = usersUtil.getCurrentUser(request);
+
+        model.addAttribute("user", userDAO.readUserWithPosts(id));
         model.addAttribute("newPost", new Post());
+        model.addAttribute("isAuthorized", currentUser != null);
+        model.addAttribute("currentUser", currentUser);
+
         return "/users/user";
     }
 
@@ -65,8 +77,16 @@ public class UsersController {
     }
 
     @GetMapping("/{id}/edit")
-    public String editForm(@PathVariable int id, Model model) {
+    public String editForm(@PathVariable int id, Model model, HttpServletRequest request) {
+
+        User currentUser = usersUtil.getCurrentUser(request);
+
+        if (currentUser == null
+            || !currentUser.getId().equals(id))
+            throw new IllegalStateException("You are not authorized");
+
         model.addAttribute("user", userDAO.read(id));
+
         return "/users/edit";
     }
 
@@ -99,5 +119,11 @@ public class UsersController {
         usersUtil.loginCurrentUser(user.getId(), response);
 
         return "redirect:/users/" + user.getId();
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletResponse response) {
+        usersUtil.logOutCurrentUser(response);
+        return "redirect:/users";
     }
 }

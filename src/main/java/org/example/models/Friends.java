@@ -14,12 +14,12 @@ import java.time.LocalDateTime;
 public class Friends extends BaseEntity {
 
     @Id
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
     @JoinColumn(name = "inviter_id")
     private User inviter;
 
     @Id
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
     @JoinColumn(name = "receiver_id")
     private User receiver;
 

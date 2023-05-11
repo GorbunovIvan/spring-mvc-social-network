@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${'Friends of ' + user.getFullName() + ':'}">Friends of the user</title>
+</head>
+<body>
+    <p>Friends of <span th:text="${user.getFullName()}">user</span></p>
+    <div th:each="friend : ${user.getFriends}">
+        <div>
+            <a th:href="@{/users/{id}(id=${friend.getId()})}" th:text="${friend.getFullName()}">friend</a>
+            <div th:if="${isCurrentUser}">
+                <form th:method="DELETE" th:action="@{/friends/{userId}/{friendId}(userId=${currentUser.getId()},friendId=${friend.getId()})}">
+                    <input type="submit" value="delete from friends"/>
+                </form>
+            </div>
+            <br/>
+        </div>
+    </div>
+</body>
+</html>

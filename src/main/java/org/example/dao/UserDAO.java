@@ -31,6 +31,31 @@ public class UserDAO extends BaseDAO<User> {
         });
     }
 
+    public User readUserWithPosts(int id) {
+        return doInSessionAndReturn(entityManager -> {
+           return entityManager.createQuery("FROM User users " +
+                           "LEFT JOIN FETCH users.posts " +
+                           "WHERE users.id=:id", User.class)
+                   .setParameter("id", id)
+                   .getResultStream()
+                   .findAny()
+                   .orElse(null);
+        });
+    }
+
+    public User readUserWithFriends(int id) {
+        return doInSessionAndReturn(entityManager -> {
+           return entityManager.createQuery("FROM User users " +
+                           "LEFT JOIN FETCH users.friendsIInvited " +
+                           "LEFT JOIN FETCH users.friendsWhoInvitedMe " +
+                           "WHERE users.id=:id", User.class)
+                   .setParameter("id", id)
+                   .getResultStream()
+                   .findAny()
+                   .orElse(null);
+        });
+    }
+
     public User readFull(int id) {
         return doInSessionAndReturn(entityManager -> {
            return entityManager.createQuery("FROM User users " +
@@ -46,4 +71,18 @@ public class UserDAO extends BaseDAO<User> {
                    .orElse(null);
         });
     }
+
+    public User readUserWithPostsAndFriends(Integer id) {
+            return doInSessionAndReturn(entityManager -> {
+                return entityManager.createQuery("FROM User users " +
+                                "LEFT JOIN FETCH users.posts " +
+                                "LEFT JOIN FETCH users.friendsIInvited " +
+                                "LEFT JOIN FETCH users.friendsWhoInvitedMe " +
+                                "WHERE users.id=:id", User.class)
+                        .setParameter("id", id)
+                        .getResultStream()
+                        .findAny()
+                        .orElse(null);
+            });
+        }
 }

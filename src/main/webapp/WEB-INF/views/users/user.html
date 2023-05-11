@@ -9,9 +9,27 @@
         <p>Name: <span th:text="${user.getName()}">name</span></p>
         <p>Surname: <span th:text="${user.getSurname()}">surname</span></p>
         <p>Birthday: <span th:text="${user.getBirthDay()}">birth day</span></p>
-        <p><a th:href="@{/users/{id}/edit(id=${user.getId()})}">edit</a></p>
+        <p th:if="${isCurrentUser}"><a th:href="@{/users/{id}/edit(id=${user.getId()})}">edit</a></p>
+        <hr/>
     </div>
-    <hr/>
+    <div>
+        <a th:href="@{/friends/{id}(id=${user.getId()})}">Friends</a>
+        <hr/>
+    </div>
+    <div th:if="${isAuthorized && !isCurrentUser}">
+        <div th:if="${isFriendToCurrentUser}">
+            <span>You are friends</span>
+            <form th:method="DELETE" th:action="@{/friends/{userId}/{friendId}(userId=${currentUser.getId()},friendId=${user.getId()})}">
+                <input type="submit" value="delete from friends"/>
+            </form>
+        </div>
+        <div th:unless="${isFriendToCurrentUser}">
+            <form th:method="POST" th:action="@{/friends/{userId}/{friendId}(userId=${currentUser.getId()},friendId=${user.getId()})}">
+                <input type="submit" value="add to friends"/>
+            </form>
+        </div>
+        <hr/>
+    </div>
     <div>
         <p>Posts</p>
         <div th:each="post : ${user.getPosts()}">
@@ -20,12 +38,14 @@
                 <span th:text="${post.getContent()}">content</span>
             </p>
         </div>
-        <form th:method="POST" th:action="@{/posts}" th:object="${newPost}">
-            <label for="content"></label>
-            <textarea id="content" th:field="*{content}">content</textarea>
-            <br/>
-            <input type="submit" value="add new post"/>
-        </form>
+        <div th:if="${isCurrentUser}">
+            <form th:method="POST" th:action="@{/posts}" th:object="${newPost}">
+                <label for="content"></label>
+                <textarea id="content" th:field="*{content}">content</textarea>
+                <br/>
+                <input type="submit" value="add new post"/>
+            </form>
+        </div>
     </div>
 </body>
 </html>

@@ -9,7 +9,12 @@
         <p><a th:href="@{/users/{id}(id=${user.getId()})}" th:text="${user.getFullName()}">user</a></p>
     </div>
     <hr/>
-    <p><a href="/users/login">Login</a></p>
-    <p><a href="/users/new">Register</a></p>
+    <div th:unless="${isAuthorized}">
+        <p><a href="/users/login">Login</a></p>
+        <p><a href="/users/new">Register</a></p>
+    </div>
+    <div th:if="${isAuthorized}">
+        <p><a href="/users/logout">Log out</a></p>
+    </div>
 </body>
 </html>

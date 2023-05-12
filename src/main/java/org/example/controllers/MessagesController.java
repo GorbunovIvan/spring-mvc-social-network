@@ -6,6 +6,7 @@ import org.example.dao.MessageDAO;
 import org.example.dao.UserDAO;
 import org.example.models.Message;
 import org.example.models.User;
+import org.example.utils.users.Error;
 import org.example.utils.users.UsersUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,8 +32,10 @@ public class MessagesController {
 
         User currentUser = usersUtil.getCurrentUser(request);
 
-        if (currentUser == null)
-            throw new IllegalStateException("You are not authorized");
+        if (currentUser == null) {
+            var error = new Error(401, "You are not authorized", "");
+            return error.getRedirectPath();
+        }
 
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("interlocutors", messageDAO.readInterlocutorsByUser(currentUser.getId()));
@@ -46,8 +49,15 @@ public class MessagesController {
         User currentUser = usersUtil.getCurrentUser(request);
         User user = userDAO.read(userId);
 
-        if (currentUser == null)
-            throw new IllegalStateException("You are not authorized");
+        if (currentUser == null) {
+            var error = new Error(401, "You are not authorized", "");
+            return error.getRedirectPath();
+        }
+
+        if (user == null) {
+            var error = new Error(404, "No user with id '" + userId + "' is found", "");
+            return error.getRedirectPath();
+        }
 
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("user", user);

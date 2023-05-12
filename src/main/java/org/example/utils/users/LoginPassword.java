@@ -1,4 +1,4 @@
-package org.example.controllers;
+package org.example.utils.users;
 
 import lombok.Getter;
 import lombok.Setter;

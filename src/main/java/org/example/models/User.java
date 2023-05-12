@@ -85,6 +85,7 @@ public class User extends BaseEntity {
         Stream<Message> iReceived = messagesIReceived.stream()
                 .filter(m -> m.getAuthor().getId().equals(userId));
 
-        return Stream.concat(iWrote, iReceived).collect(Collectors.toSet());
+        return Stream.concat(iWrote, iReceived)
+                .collect(Collectors.toSet());
     }
 }

@@ -30,6 +30,16 @@
         </div>
         <hr/>
     </div>
+    <div th:if="${isAuthorized}">
+        <div th:if="${isCurrentUser}">
+            <a href="/messages">Messages</a>
+            <hr/>
+        </div>
+        <div th:unless="${isCurrentUser}">
+            <a th:href="@{/messages/{id}(id=${user.getId()})}">start messaging</a>
+            <hr/>
+        </div>
+    </div>
     <div>
         <p>Posts</p>
         <div th:each="post : ${user.getPosts()}">

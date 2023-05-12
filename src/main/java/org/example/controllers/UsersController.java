@@ -43,6 +43,9 @@ public class UsersController {
         User user = userDAO.readUserWithPostsAndFriends(id);
         User currentUser = usersUtil.getCurrentUser(request);
 
+        if (user == null)
+            throw new IllegalArgumentException("No user with id '" + id + "' is found");
+
         model.addAttribute("user", user);
         model.addAttribute("newPost", new Post());
         model.addAttribute("isAuthorized", currentUser != null);

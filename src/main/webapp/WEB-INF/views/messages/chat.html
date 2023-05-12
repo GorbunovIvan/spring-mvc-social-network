@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${'Chat with ' + user.getFullName()}">Chat with user</title>
+</head>
+<body>
+    <div>
+        <h5 th:text="${'Chat with ' + user.getFullName()}">Chat with user</h5>
+    </div>
+    <div th:each="message : ${messages}">
+        <div>
+
+            <a th:href="@{/users/{id}(id=${currentUser.getId()})}"
+               th:if="${message.getAuthor().equals(currentUser)}">you</a>
+
+            <a th:href="@{/users/{id}(id=${user.getId()})}" th:text="${user.getName()}"
+               th:if="${message.getReceiver().equals(currentUser)}">user</a>
+
+            <span th:text="${message.getTime()}">text</span>
+            <span style="color:darkblue; font-weight: bold" th:text="${message.getText()}">text</span>
+            <br/>
+
+        </div>
+    </div>
+    <hr/>
+    <div>
+        <form th:method="POST" th:action="@{/messages/{id}(id=${user.getId()})}" th:object="${newMessage}">
+            <label for="text">new message</label>
+            <input id="text" type="text" th:field="*{text}"/>
+            <div style="color:red" th:if="${#fields.hasErrors('text')}" th:errors="*{text}">Text error</div>
+            <input type="submit" value="send"/>
+        </form>
+    </div>
+</body>
+</html>

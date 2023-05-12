@@ -73,16 +73,17 @@ public class UserDAO extends BaseDAO<User> {
     }
 
     public User readUserWithPostsAndFriends(Integer id) {
-            return doInSessionAndReturn(entityManager -> {
-                return entityManager.createQuery("FROM User users " +
-                                "LEFT JOIN FETCH users.posts " +
-                                "LEFT JOIN FETCH users.friendsIInvited " +
-                                "LEFT JOIN FETCH users.friendsWhoInvitedMe " +
-                                "WHERE users.id=:id", User.class)
-                        .setParameter("id", id)
-                        .getResultStream()
-                        .findAny()
-                        .orElse(null);
-            });
-        }
+        return doInSessionAndReturn(entityManager -> {
+            return entityManager.createQuery("FROM User users " +
+                            "LEFT JOIN FETCH users.posts " +
+                            "LEFT JOIN FETCH users.friendsIInvited " +
+                            "LEFT JOIN FETCH users.friendsWhoInvitedMe " +
+                            "WHERE users.id=:id", User.class)
+                    .setParameter("id", id)
+                    .getResultStream()
+                    .findAny()
+                    .orElse(null);
+        });
+    }
+
 }

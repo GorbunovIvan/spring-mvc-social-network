@@ -2,6 +2,7 @@ package org.example.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -29,9 +30,15 @@ public class Message extends BaseEntity {
 
     @Column(length = 999)
     @NotNull
+    @Size(min = 1, message = "Text is empty")
     private String text;
 
     private LocalDateTime time;
+
+    public Message(User author, User receiver) {
+        this.author = author;
+        this.receiver = receiver;
+    }
 
     @Override
     public String toString() {

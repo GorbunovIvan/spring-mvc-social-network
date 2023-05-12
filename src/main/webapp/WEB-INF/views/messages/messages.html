@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${'Messages of ' + currentUser.getFullName()}">Messages of user</title>
+</head>
+<body>
+    <h5 th:text="${'Messages of ' + currentUser.getFullName()}">Messages of user</h5>
+    <div th:each="user : ${interlocutors}">
+        <p><a th:href="@{/messages/{id}(id=${user.getId()})}" th:text="${user.getFullName()}">Interlocutor</a></p>
+    </div>
+</body>
+</html>

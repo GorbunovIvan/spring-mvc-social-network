@@ -7,6 +7,8 @@ import org.example.dao.UserDAO;
 import org.example.models.Post;
 import org.example.models.User;
 import org.example.utils.users.UsersUtil;
+import org.example.utils.users.LoginPassword;
+import org.example.utils.users.Error;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,8 +45,10 @@ public class UsersController {
         User user = userDAO.readUserWithPostsAndFriends(id);
         User currentUser = usersUtil.getCurrentUser(request);
 
-        if (user == null)
-            throw new IllegalArgumentException("No user with id '" + id + "' is found");
+        if (user == null) {
+            var error = new Error(404, "No user with id '" + id + "' is found", "");
+            return error.getRedirectPath();
+        }
 
         model.addAttribute("user", user);
         model.addAttribute("newPost", new Post());
@@ -88,8 +92,10 @@ public class UsersController {
         User currentUser = usersUtil.getCurrentUser(request);
 
         if (currentUser == null
-            || !currentUser.getId().equals(id))
-            throw new IllegalStateException("You are not allowed to go here");
+            || !currentUser.getId().equals(id)) {
+            var error = new Error(403, "You are not allowed to go here", "");
+            return error.getRedirectPath();
+        }
 
         model.addAttribute("user", userDAO.read(id));
 
@@ -104,8 +110,10 @@ public class UsersController {
         User currentUser = usersUtil.getCurrentUser(request);
 
         if (currentUser == null
-                || !currentUser.getId().equals(id))
-            throw new IllegalStateException("You are not allowed to do this");
+                || !currentUser.getId().equals(id)) {
+            var error = new Error(403, "You are not allowed to do this", "");
+            return error.getRedirectPath();
+        }
 
         if (bindingResult.hasErrors())
             return "redirect:/users/" + id + "/edit";

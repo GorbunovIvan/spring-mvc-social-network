@@ -42,12 +42,6 @@
     </div>
     <div>
         <p>Posts</p>
-        <div th:each="post : ${user.getPosts()}">
-            <p>
-                <span th:text="${post.getTime()}">time</span><br/>
-                <span th:text="${post.getContent()}">content</span>
-            </p>
-        </div>
         <div th:if="${isCurrentUser}">
             <form th:method="POST" th:action="@{/posts}" th:object="${newPost}">
                 <label for="content"></label>
@@ -55,6 +49,12 @@
                 <br/>
                 <input type="submit" value="add new post"/>
             </form>
+        </div>
+        <div th:each="post : ${user.getPosts()}">
+            <p>
+                <span th:text="${post.getTime()}">time</span><br/>
+                <span th:text="${post.getContent()}">content</span>
+            </p>
         </div>
     </div>
 </body>

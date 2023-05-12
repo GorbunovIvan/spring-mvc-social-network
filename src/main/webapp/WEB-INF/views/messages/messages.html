@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${'Messages of ' + currentUser.getFullName()}">Messages of user</title>
+    <title th:text="${'Conversations of ' + currentUser.getFullName()}">Conversations of user</title>
 </head>
 <body>
-    <h5 th:text="${'Messages of ' + currentUser.getFullName()}">Messages of user</h5>
+    <h4 th:text="${'Conversations of ' + currentUser.getFullName()}">Conversations of user</h4>
     <div th:each="user : ${interlocutors}">
         <p><a th:href="@{/messages/{id}(id=${user.getId()})}" th:text="${user.getFullName()}">Interlocutor</a></p>
     </div>

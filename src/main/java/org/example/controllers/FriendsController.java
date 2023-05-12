@@ -5,6 +5,7 @@ import org.example.dao.FriendsDAO;
 import org.example.dao.UserDAO;
 import org.example.models.Friends;
 import org.example.models.User;
+import org.example.utils.users.Error;
 import org.example.utils.users.UsersUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,8 +49,10 @@ public class FriendsController {
         User currentUser = usersUtil.getCurrentUser(request);
 
         if (currentUser == null
-            || !currentUser.getId().equals(userId))
-            throw new IllegalStateException("You are not allowed to do this");
+            || !currentUser.getId().equals(userId)) {
+            var error = new Error(403, "You are not allowed to do this", "");
+            return error.getRedirectPath();
+        }
 
         User friend = userDAO.read(friendId);
 
@@ -71,11 +74,15 @@ public class FriendsController {
         User currentUser = usersUtil.getCurrentUser(request);
         User friend = userDAO.read(friendId);
 
-        if (currentUser == null)
-            throw new IllegalStateException("Unauthorized user");
+        if (currentUser == null) {
+            var error = new Error(401, "You are not authorized", "");
+            return error.getRedirectPath();
+        }
 
-        if (!currentUser.getId().equals(userId))
-            throw new IllegalStateException("You are not allowed to do this");
+        if (!currentUser.getId().equals(userId)) {
+            var error = new Error(403, "You are not allowed to do this", "");
+            return error.getRedirectPath();
+        }
 
         friendsDAO.delete(currentUser, friend);
 

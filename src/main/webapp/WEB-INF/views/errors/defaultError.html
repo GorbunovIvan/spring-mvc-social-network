@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${'error (' + code + ') - ' + message}">Error</title>
+</head>
+<body>
+    <h1 th:text="${'Error ' + code}">Error code</h1>
+    <h3 th:text="${message}">Short error</h3>
+    <h4><a href="/users/login" th:if="${code == 401}">Login</a></h4>
+    <h5 th:text="${description}">Description</h5>
+<!--    <details th:if="${!description != null && !description.isEmpty()}">-->
+<!--        <summary>Full description</summary>-->
+<!--        <h5 th:text="${description}">Description</h5>-->
+<!--    </details>-->
+</body>
+</html>
